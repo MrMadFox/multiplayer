@@ -26,8 +26,9 @@ def update():
     screen.blit(backgroundimage, (0, 0))
     screen.blit(car,(user.x,user.y))
     #enemy
-    requests.post("http://127.0.0.1:5000/post",data={"playingid":str(playingid),"user.id":str(user.id),"y":str((user.y*100)//screen_y)})
-    enemy_y=int(requests.get("http://127.0.0.1:5000/get",data={"playingid":str(playingid),"user.id":str(user.id)}).text.strip(" "))
+    #requests.post("http://127.0.0.1:5000/post",data={"playingid":str(playingid),"user.id":str(user.id),"y":str((user.y*100)//screen_y)})
+    enemy_y=int(requests.post("http://127.0.0.1:5000/post",data={"playingid":str(playingid),"user.id":str(user.id),"y":str((user.y*100)//screen_y)}).text.strip(" "))
+    #enemy_y=int(requests.get("http://127.0.0.1:5000/get",data={"playingid":str(playingid),"user.id":str(user.id)}).text.strip(" "))
     screen.blit(car1,(screen_x-10-car_x,(enemy_y*screen_y)//100))
     pygame.display.update()
 def start():

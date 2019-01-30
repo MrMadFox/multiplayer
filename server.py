@@ -9,31 +9,36 @@ def post():
         cursor.execute("update fight set one='%s' where playingid='%s';"%(request.form["y"],request.form["playingid"]))
     if request.form["user.id"]=="2":
         cursor.execute("update fight set two='%s' where playingid='%s';"%(request.form["y"],request.form["playingid"]))
+    cursor.fetchall()
     conn.commit()
-    return("0")
-@app.route("/get",methods=["GET"])
-def getit():
-    conn=sqlite3.connect("data")
-    cursor=conn.cursor()
+    ############
     if request.form["user.id"]=="1":
         cursor.execute("select two from fight where playingid='%s';"%(request.form["playingid"]))
     if request.form["user.id"]=="2":
         cursor.execute("select one from fight where playingid='%s';" % (request.form["playingid"]))
     return(str(cursor.fetchall()[0][0]))
+
+    ##################
+    return("0")
+# @app.route("/get",methods=["GET"])
+# def getit():
+#     conn=sqlite3.connect("data")
+#     cursor=conn.cursor()
+#     if request.form["user.id"]=="1":
+#         cursor.execute("select two from fight where playingid='%s';"%(request.form["playingid"]))
+#     if request.form["user.id"]=="2":
+#         cursor.execute("select one from fight where playingid='%s';" % (request.form["playingid"]))
+#     return(str(cursor.fetchall()[0][0]))
 @app.route("/ready",methods=["POST"])
 def ready1():
     conn=sqlite3.connect("data")
     cursor=conn.cursor()
-    print("s")
     if request.form["user.id"]=="1":
-        print("a")
         exe="update details set one='%s' where playingid='%s';"%(request.form["ready"],request.form["playingid"])
         cursor.execute(exe)
     if request.form["user.id"]=="2":
-        print("i")
         exe="update details set two='%s' where playingid='%s';"%(request.form["ready"],request.form["playingid"])
         cursor.execute(exe)
-    print("p")
     conn.commit()
     return("0")
 @app.route("/ready",methods=["GET"])
