@@ -31,11 +31,11 @@ clock = pygame.time.Clock()
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 textplay = myfont.render('START', False, (0, 0, 0))
 textexit = myfont.render('EXIT', False, (0, 0, 0))
-playingid = 1
 userbullets = []
 enemybullets = []
 fire = 0
 enemy_y = 50
+playingi1=0
 def end(text):
     screen.blit(backgroundimage, (0, 0))
     te = myfont.render(text, False, (0, 0, 0))
@@ -66,12 +66,17 @@ def update():
         screen.blit(bulletimage1, (enemybullets[j].x, enemybullets[j].y))
     pygame.display.update()
 def start():
-    global user
+    global user,playingid
     user = player.player(10, screen_y // 2)
     velocity = 10
     ready = 1
+    s.sendto(b"-1 0 0 0", (ip, port))
+    data, addr = s.recvfrom(1024)
+    playingid = int(data)
+    print(playingid)
     s.sendto(b"%d %d 0 0" % (playingid, ready), (ip, port))
     s.recvfrom(1024)  # to start the game at the same time
+    print(playingid)
     global fire
     while (1):
         for i in pygame.event.get():
