@@ -1,5 +1,4 @@
 import pygame, player, socket, bullet
-
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ip = "127.0.0.1"
 port = 5005
@@ -37,8 +36,6 @@ userbullets = []
 enemybullets = []
 fire = 0
 enemy_y = 50
-
-
 def end(text):
     screen.blit(backgroundimage, (0, 0))
     te = myfont.render(text, False, (0, 0, 0))
@@ -49,8 +46,6 @@ def end(text):
             if i.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
-
 def update():
     screen.blit(backgroundimage, (0, 0))
     screen.blit(car, (user.x, user.y))
@@ -69,16 +64,13 @@ def update():
         screen.blit(bulletimage, (userbullets[i].x, userbullets[i].y))
     for j in range(len(enemybullets)):
         screen.blit(bulletimage1, (enemybullets[j].x, enemybullets[j].y))
-
     pygame.display.update()
-
-
 def start():
     global user
     user = player.player(10, screen_y // 2)
     velocity = 10
     ready = 1
-    s.sendto(b"%d %d" % (playingid, ready), (ip, port))
+    s.sendto(b"%d %d 0 0" % (playingid, ready), (ip, port))
     s.recvfrom(1024)  # to start the game at the same time
     global fire
     while (1):
@@ -116,11 +108,8 @@ def start():
                 enemybullets.pop(i)
                 continue
             i += 1
-
         update()
         clock.tick(30)
-
-
 while (1):
     screen.blit(backgroundimage, (0, 0))
     screen.blit(textplay, ((screen_x // 2) - textplay.get_width() // 2, screen_y // 4))
