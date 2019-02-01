@@ -1,6 +1,6 @@
 import socket
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.bind(("127.0.0.1",5005))
+s.bind(("172.17.28.123",5005))
 playinglist=[0]*5
 class sai:
     def __init__(self):

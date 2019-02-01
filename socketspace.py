@@ -1,6 +1,6 @@
 import pygame, player, socket, bullet
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-ip = "127.0.0.1"
+ip = "172.17.28.123"
 port = 5005
 pygame.init()
 pygame.font.init()
@@ -73,10 +73,8 @@ def start():
     s.sendto(b"-1 0 0 0", (ip, port))
     data, addr = s.recvfrom(1024)
     playingid = int(data)
-    print(playingid)
     s.sendto(b"%d %d 0 0" % (playingid, ready), (ip, port))
     s.recvfrom(1024)  # to start the game at the same time
-    print(playingid)
     global fire
     while (1):
         for i in pygame.event.get():
