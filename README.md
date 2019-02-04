@@ -1,5 +1,5 @@
 
-Multiplayer game with automatic playing-room is assigned as the match starts.
+Multiplayer game with automatic playing-room-id is assigned as the match starts.
 
 Dynamic user-id is assigned every time user enters.
 
