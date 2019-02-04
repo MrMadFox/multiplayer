@@ -16,7 +16,7 @@ class sai:
         self.p2_health=100
 while(1):
     data, addr = s.recvfrom(1024)
-    print(addr)
+    #print(addr)
     playingid, position, fire, health = list(map(int, data.decode().split()))
     if playingid==-1:
         zz=0
