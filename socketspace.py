@@ -38,7 +38,7 @@ enemy_y = 50
 playingi1=0
 healthbar_x=100
 healthbar_y=10
-pygame.mixer.music.load("2.mp3")
+pygame.mixer.music.load("3.mp3")
 def end(text):
     screen.blit(backgroundimage, (0, 0))
     te = myfont.render(text, False, (0, 0, 0))
