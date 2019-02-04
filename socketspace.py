@@ -1,6 +1,6 @@
 import pygame, player, socket, bullet
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-ip = "172.17.28.123"
+ip = "172.17.20.77"
 port = 5005
 pygame.init()
 pygame.font.init()
@@ -12,7 +12,7 @@ screen = pygame.display.set_mode((screen_x , screen_y))
 backgroundimage = pygame.image.load("background.png")
 backgroundimage = pygame.transform.scale(backgroundimage, (screen_x, screen_y))
 car = pygame.image.load("hero.png")
-car1 = pygame.image.load("enemy.png")  # enemy.png
+car1 = pygame.image.load("enemy.png")
 car = pygame.transform.scale(car, (car_x, car_y))
 car.convert_alpha()
 car.set_colorkey((255, 255, 255))
@@ -36,6 +36,9 @@ enemybullets = []
 fire = 0
 enemy_y = 50
 playingi1=0
+healthbar_x=100
+healthbar_y=10
+pygame.mixer.music.load("2.mp3")
 def end(text):
     screen.blit(backgroundimage, (0, 0))
     te = myfont.render(text, False, (0, 0, 0))
@@ -46,6 +49,17 @@ def end(text):
             if i.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+def healthbar(h,ii):
+    if ii==1:
+        xx=10
+        color = (0, 255, 0)
+    else:
+        xx=screen_x-healthbar_x-10
+        color = (255, 0, 0)
+    pygame.draw.rect(screen,(0,0,0),(xx,10,healthbar_x,healthbar_y),2)
+    pygame.draw.rect(screen,color,(xx,10,healthbar_x*(h/100),healthbar_y))
+
+
 def update():
     screen.blit(backgroundimage, (0, 0))
     screen.blit(car, (user.x, user.y))
@@ -64,6 +78,8 @@ def update():
         screen.blit(bulletimage, (userbullets[i].x, userbullets[i].y))
     for j in range(len(enemybullets)):
         screen.blit(bulletimage1, (enemybullets[j].x, enemybullets[j].y))
+    healthbar(user.health,1)
+    healthbar(enemy_health,2)
     pygame.display.update()
 def start():
     global user,playingid
@@ -89,7 +105,9 @@ def start():
         mouse_x, mouse_y = pygame.mouse.get_pos()
         user.y += (mouse_y - user.y) // velocity
         if fire == 1:
+            pygame.mixer.music.stop()
             userbullets.append(bullet.bullet(user.x + car_x, user.y + car_y // 2))
+            pygame.mixer.music.play(0)
         i = 0
         while (i < len(userbullets)):
             userbullets[i].x += 20

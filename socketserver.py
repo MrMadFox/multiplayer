@@ -1,6 +1,6 @@
 import socket
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.bind(("172.17.28.123",5005))
+s.bind(("0.0.0.0",5005))#my public ip is 136.233.9.101
 playinglist=[0]*5
 class sai:
     def __init__(self):
@@ -16,6 +16,7 @@ class sai:
         self.p2_health=100
 while(1):
     data, addr = s.recvfrom(1024)
+    print(addr)
     playingid, position, fire, health = list(map(int, data.decode().split()))
     if playingid==-1:
         zz=0
