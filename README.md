@@ -1,3 +1,8 @@
-player one will use scape.py with player.id =1
-the other player will use scace.py with player.id=2
-and both should use same playingid
+
+Multiplayer game with automatic playing-room-id is assigned as the match starts.
+
+Dynamic user-id is assigned every time user enters.
+
+Opponents are choosen at as first come first serve.
+
+Players can connect to the same network and have fun with this game.
