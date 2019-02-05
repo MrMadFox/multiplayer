@@ -1,7 +1,7 @@
-import pygame, player, socket, bullet
+import pygame, player, socket, bullet ,Name
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ip = "127.0.0.1"#input("enete number:")#ip address
-name=input("Enter Your Name:")
+name=Name.name()#input("Enter Your Name:")
 port = 5005
 pygame.init()
 pygame.font.init()
@@ -43,6 +43,7 @@ healthbar_x=100
 healthbar_y=10
 pygame.mixer.music.load("3.wav")
 enemy_name=""
+
 def end(text):
     screen.blit(backgroundimage, (0, 0))
     te = myfont.render(text, False, (0, 0, 0))
@@ -93,7 +94,7 @@ def start():
     s.sendto(b"-1 0 0 0 %s"%(name.encode()), (ip, port))
     data, addr = s.recvfrom(1024)
     playingid = int(data)
-    s.sendto(b"%d %d 0 0 0"%(playingid,ready), (ip, port))
+    s.seindto(b"%d %d 0 0 0"%(playingid,ready), (ip, port))
     data,addr=s.recvfrom(1024)  # to start the game at the same time
     enemy_name=data.decode().split()[1]
     textenemy_name =myfont.render(enemy_name, False, (0, 0, 0))
