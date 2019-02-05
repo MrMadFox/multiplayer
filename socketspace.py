@@ -1,7 +1,8 @@
 import pygame, player, socket, bullet ,Name
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ip = "127.0.0.1"#input("enete number:")#ip address
-name=Name.name()#input("Enter Your Name:")
+name=Name.name()[16:]#input("Enter Your Name:")
+name=name+" "*(8-len(name))
 port = 5005
 pygame.init()
 pygame.font.init()
@@ -9,6 +10,11 @@ screen_x = 700
 screen_y = 400
 car_x = 50
 car_y = 50
+fire = 0
+enemy_y = 50
+playingi1=0
+healthbar_x=100
+healthbar_y=10
 screen = pygame.display.set_mode((screen_x , screen_y))
 backgroundimage = pygame.image.load("background.png")
 backgroundimage = pygame.transform.scale(backgroundimage, (screen_x, screen_y))
@@ -33,14 +39,11 @@ myfont = pygame.font.SysFont('Comic Sans MS', 30)
 textplay = myfont.render('START', False, (0, 0, 0))
 textexit = myfont.render('EXIT', False, (0, 0, 0))
 textname=myfont.render(name, False, (0, 0, 0))
+textname=pygame.transform.scale(textname,(healthbar_x,30))
 textenemy_name=""
 userbullets = []
 enemybullets = []
-fire = 0
-enemy_y = 50
-playingi1=0
-healthbar_x=100
-healthbar_y=10
+
 pygame.mixer.music.load("3.wav")
 enemy_name=""
 
@@ -58,11 +61,12 @@ def healthbar(h,ii):
     if ii==1:
         xx=10
         color = (0, 255, 0)
-        screen.blit(textname, (10, 20))
+        ttname=textname
     else:
         xx=screen_x-healthbar_x-10
         color = (255, 0, 0)
-        screen.blit(textenemy_name, (xx, 20))
+        ttname=textenemy_name
+    screen.blit(ttname, (xx, 20))
     pygame.draw.rect(screen, (0,0,0), (xx, 10, healthbar_x, healthbar_y), 2)#box
     pygame.draw.rect(screen, color, (xx, 10, healthbar_x * (h / 100), healthbar_y))#fill health
 def update():
@@ -94,10 +98,12 @@ def start():
     s.sendto(b"-1 0 0 0 %s"%(name.encode()), (ip, port))
     data, addr = s.recvfrom(1024)
     playingid = int(data)
-    s.seindto(b"%d %d 0 0 0"%(playingid,ready), (ip, port))
+    s.sendto(b"%d %d 0 0 0"%(playingid,ready), (ip, port))
     data,addr=s.recvfrom(1024)  # to start the game at the same time
     enemy_name=data.decode().split()[1]
+    enemy_name = enemy_name + " " * (8 - len(enemy_name))
     textenemy_name =myfont.render(enemy_name, False, (0, 0, 0))
+    textenemy_name=pygame.transform.scale(textenemy_name, (healthbar_x, 30))
     while (1):
         for i in pygame.event.get():
             if i.type == pygame.QUIT:

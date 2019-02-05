@@ -3,7 +3,7 @@ def name():
     screen = pygame.display.set_mode((700, 400))
     clock = pygame.time.Clock()
     pygame.init()
-    text=textinput.TextInput(initial_string="Enetr Your Name:")
+    text=textinput.TextInput(initial_string="Enter Your Name:")
     while True:
         screen.fill((225, 225, 225))
 
