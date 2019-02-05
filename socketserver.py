@@ -14,16 +14,21 @@ class sai:
         self.p2_fire=0
         self.p1_health=100
         self.p2_health=100
+        self.p1_name=""
+        self.P2_name=""
 while(1):
     data, addr = s.recvfrom(1024)
     #print(addr)
-    playingid, position, fire, health = list(map(int, data.decode().split()))
+    datalist=data.decode().split()
+    playingid, position, fire, health = list(map(int, datalist[:-1]))
+    name=datalist[-1]
     if playingid==-1:
         zz=0
         for createplayingid in range(1,len(playinglist)):
             if playinglist[createplayingid]!=0:
                 if playinglist[createplayingid].p2_addr==0:
                     playinglist[createplayingid].p2_addr=addr
+                    playinglist[createplayingid].p2_name=name
                     zz=createplayingid
                     break
         if zz==0:
@@ -31,6 +36,7 @@ while(1):
                 if playinglist[createplayingid] == 0:
                     playinglist[createplayingid]=sai()
                     playinglist[createplayingid].p1_addr = addr
+                    playinglist[createplayingid].p1_name = name
                     zz = createplayingid
                     break
         s.sendto((str(zz)).encode("utf-8"), addr)
@@ -51,8 +57,8 @@ while(1):
         elif userid=="2":
             playinglist[playingid].p2_ready=ready
         if playinglist[playingid].p1_ready+playinglist[playingid].p2_ready==2:
-            s.sendto(b"1", playinglist[playingid].p2_addr)
-            s.sendto(b"1", playinglist[playingid].p1_addr)
+            s.sendto(b"1 %s"%(playinglist[playingid].p1_name.encode()), playinglist[playingid].p2_addr)
+            s.sendto(b"1 %s"%(playinglist[playingid].p2_name.encode()), playinglist[playingid].p1_addr)
     else:
         #if not playinglist[playingid].p1_addr==addr or playinglist[playingid].p2_addr==addr:
         #    continue
