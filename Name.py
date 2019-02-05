@@ -1,9 +1,9 @@
 import pygame,textinput
-def name():
+def name(display_text):
     screen = pygame.display.set_mode((700, 400))
     clock = pygame.time.Clock()
     pygame.init()
-    text=textinput.TextInput(initial_string="Enter Your Name:")
+    text=textinput.TextInput(initial_string=display_text)
     while True:
         screen.fill((225, 225, 225))
 

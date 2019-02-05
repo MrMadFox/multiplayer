@@ -1,7 +1,7 @@
 import pygame, player, socket, bullet ,Name
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 ip = "127.0.0.1"#input("enete number:")#ip address
-name=Name.name()[16:]#input("Enter Your Name:")
+name=Name.name("Enter Your Name:")[16:]#input("Enter Your Name:")
 name=name+" "*(8-len(name))
 port = 5005
 pygame.init()
