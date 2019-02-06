@@ -6,7 +6,7 @@ name=name+" "*(8-len(name))
 port = 5005
 pygame.init()
 pygame.font.init()
-screen_x = 700
+screen_x = 800
 screen_y = 400
 car_x = 50
 car_y = 50
@@ -38,25 +38,31 @@ clock = pygame.time.Clock()
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 textplay = myfont.render('START', False, (0, 0, 0))
 textexit = myfont.render('EXIT', False, (0, 0, 0))
+textplayagain=myfont.render("Play again",False,(0,0,0))
 textname=myfont.render(name, False, (0, 0, 0))
+textmatching=myfont.render("Matching please wait", False, (0, 0, 0))
 textname=pygame.transform.scale(textname,(healthbar_x,30))
 textenemy_name=""
 userbullets = []
 enemybullets = []
-
 pygame.mixer.music.load("3.wav")
 enemy_name=""
-
 def end(text):
     screen.blit(backgroundimage, (0, 0))
     te = myfont.render(text, False, (0, 0, 0))
-    screen.blit(te, (screen_x // 2 - te.get_width() // 2, screen_y // 2))
+    screen.blit(te, (screen_x // 2 - te.get_width() // 2, screen_y // 4))
+    screen.blit(textplayagain, (screen_x // 2 - textplayagain.get_width() // 2, 3*screen_y // 4))
     pygame.display.update()
     while(1):
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if i.type==pygame.MOUSEBUTTONDOWN and i.button==1:
+                mx,my=pygame.mouse.get_pos()
+                if my>=screen_y//2:
+                    main()
+
 def healthbar(h,ii):
     if ii==1:
         xx=10
@@ -92,6 +98,9 @@ def update():
     pygame.display.update()
 def start():
     global user,playingid ,fire,textenemy_name
+    screen.blit(backgroundimage, (0, 0))
+    screen.blit(textmatching, ((screen_x // 2) - textmatching.get_width() // 2, screen_y // 2))
+    pygame.display.update()
     user = player.player(10, screen_y // 2)
     velocity = 10
     ready = 1
@@ -99,7 +108,17 @@ def start():
     data, addr = s.recvfrom(1024)
     playingid = int(data)
     s.sendto(b"%d %d 0 0 0"%(playingid,ready), (ip, port))
-    data,addr=s.recvfrom(1024)  # to start the game at the same time
+    s.settimeout(0.2)
+    while(1):
+        try:
+            data,addr=s.recvfrom(1024)  # to start the game at the same time
+            break
+        except:
+            for i in pygame.event.get():
+                if i.type == pygame.QUIT:
+                    s.sendto(b"%d 0 0 0 0" % (playingid), (ip, port))
+                    return (0)
+    s.settimeout(None)
     enemy_name=data.decode().split()[1]
     enemy_name = enemy_name + " " * (8 - len(enemy_name))
     textenemy_name =myfont.render(enemy_name, False, (0, 0, 0))
@@ -143,20 +162,22 @@ def start():
             i += 1
         update()
         clock.tick(30)
-while (1):
-    screen.blit(backgroundimage, (0, 0))
-    screen.blit(textplay, ((screen_x // 2) - textplay.get_width() // 2, screen_y // 4))
-    screen.blit(textexit, ((screen_x // 2) - textexit.get_width() // 2, 3 * screen_y // 4))
-    pygame.display.update()
-    i = pygame.event.wait()
-    if i.type == pygame.QUIT:
-        pygame.quit()
-        quit()
-    if i.type == pygame.MOUSEBUTTONDOWN:
-        if i.button == 1:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if mouse_y <= screen_y // 2:
-                start()
-            else:
-                pygame.quit()
-                quit()
+def main():
+    while (1):
+        screen.blit(backgroundimage, (0, 0))
+        screen.blit(textplay, ((screen_x // 2) - textplay.get_width() // 2, screen_y // 4))
+        screen.blit(textexit, ((screen_x // 2) - textexit.get_width() // 2, 3 * screen_y // 4))
+        pygame.display.update()
+        i = pygame.event.wait()
+        if i.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        if i.type == pygame.MOUSEBUTTONDOWN:
+            if i.button == 1:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if mouse_y <= screen_y // 2:
+                    start()
+                else:
+                    pygame.quit()
+                    quit()
+main()
